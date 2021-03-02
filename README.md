@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img alt="Happy" title="Happy" width="450px"  src=".github/logo.svg" />
+  <img alt="Moveit" title="Moveit" width="450px"  src=".github/logo.svg" />
 </h1>
 
 <h3 align="center">
@@ -18,11 +18,11 @@
   <a href="#-layout">Layout</a> •
   <a href="#-technologies">Technologies</a> •
   <a href="#-getting-started">Getting started</a> •
-  <a href="#license">License</a>
+  <a href="#-license">License</a>
 </p>
 
 <p align="center">
-  <img alt="Happy" src=".github/moveit.png" width="100%">
+  <img alt="Moveit" src=".github/moveit.png" width="100%">
 </p>
 
 ## 💪 About the project
