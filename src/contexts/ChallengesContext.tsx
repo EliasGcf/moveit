@@ -1,4 +1,11 @@
-import { createContext, ReactNode, useEffect, useState } from 'react';
+import {
+  createContext,
+  ReactNode,
+  useEffect,
+  useState,
+  useCallback,
+  useMemo,
+} from 'react';
 import Cookies from 'js-cookie';
 
 import { LevelUpModal } from '../components/LevelUpModal';
@@ -47,28 +54,20 @@ export function ChallengesProvider({
   const [activeChallenge, setActiveChallenge] = useState<Challenge>(null);
   const [isLevelUpModelOpen, setIsLevelUpModelOpen] = useState(false);
 
-  const experienceToNextLevel = ((level + 1) * 4) ** 2;
+  const experienceToNextLevel = useMemo(() => {
+    return ((level + 1) * 4) ** 2;
+  }, [level]);
 
-  useEffect(() => {
-    Notification.requestPermission();
-  }, []);
-
-  useEffect(() => {
-    Cookies.set('level', String(level));
-    Cookies.set('currentExperience', String(currentExperience));
-    Cookies.set('challengesCompleted', String(challengesCompleted));
-  }, [level, currentExperience, challengesCompleted]);
-
-  function levelUp() {
+  const levelUp = useCallback(() => {
     setLevel(level + 1);
     setIsLevelUpModelOpen(true);
-  }
+  }, [level]);
 
-  function closeLevelUpModal() {
+  const closeLevelUpModal = useCallback(() => {
     setIsLevelUpModelOpen(false);
-  }
+  }, []);
 
-  function startNewChallenge() {
+  const startNewChallenge = useCallback(() => {
     const randomChallengeIndex = Math.floor(Math.random() * challenges.length);
     const challenge = challenges[randomChallengeIndex];
 
@@ -81,13 +80,13 @@ export function ChallengesProvider({
         body: `Valendo ${challenge.amount}xp!`,
       });
     }
-  }
+  }, []);
 
-  function resetChallenge() {
+  const resetChallenge = useCallback(() => {
     setActiveChallenge(null);
-  }
+  }, []);
 
-  function completeChallenge() {
+  const completeChallenge = useCallback(() => {
     if (!activeChallenge) return;
 
     const { amount } = activeChallenge;
@@ -102,25 +101,53 @@ export function ChallengesProvider({
     setCurrentExperience(finalExperience);
     setActiveChallenge(null);
     setChallengesCompleted(challengesCompleted + 1);
-  }
+  }, [
+    activeChallenge,
+    challengesCompleted,
+    currentExperience,
+    experienceToNextLevel,
+    levelUp,
+  ]);
+
+  const value = useMemo(() => {
+    return {
+      level,
+      activeChallenge,
+      currentExperience,
+      challengesCompleted,
+      experienceToNextLevel,
+      levelUp,
+      resetChallenge,
+      startNewChallenge,
+      completeChallenge,
+      closeLevelUpModal,
+    };
+  }, [
+    activeChallenge,
+    challengesCompleted,
+    closeLevelUpModal,
+    completeChallenge,
+    currentExperience,
+    experienceToNextLevel,
+    level,
+    levelUp,
+    resetChallenge,
+    startNewChallenge,
+  ]);
+
+  useEffect(() => {
+    Notification.requestPermission();
+  }, []);
+
+  useEffect(() => {
+    Cookies.set('level', String(level));
+    Cookies.set('currentExperience', String(currentExperience));
+    Cookies.set('challengesCompleted', String(challengesCompleted));
+  }, [level, currentExperience, challengesCompleted]);
 
   return (
-    <ChallengesContext.Provider
-      value={{
-        level,
-        activeChallenge,
-        currentExperience,
-        challengesCompleted,
-        experienceToNextLevel,
-        levelUp,
-        resetChallenge,
-        startNewChallenge,
-        completeChallenge,
-        closeLevelUpModal,
-      }}
-    >
+    <ChallengesContext.Provider value={value}>
       {children}
-
       {isLevelUpModelOpen && <LevelUpModal />}
     </ChallengesContext.Provider>
   );

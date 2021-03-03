@@ -1,25 +1,27 @@
-import { useContext } from 'react';
+import { useCallback } from 'react';
 
-import { ChallengesContext } from '../contexts/ChallengesContext';
-import { CountdownContext } from '../contexts/CountdownContext';
+import { useChallenges } from '../hooks/useChallenges';
+import { useCountdown } from '../hooks/useCountdown';
 
 import styles from '../styles/components/ChallengeBox.module.css';
 
 export function ChallengeBox() {
-  const { activeChallenge, resetChallenge, completeChallenge } = useContext(
-    ChallengesContext,
-  );
-  const { resetCountdown } = useContext(CountdownContext);
+  const { resetCountdown } = useCountdown();
+  const {
+    activeChallenge,
+    resetChallenge,
+    completeChallenge,
+  } = useChallenges();
 
-  function handleChallengeSucceed() {
+  const handleChallengeSucceed = useCallback(() => {
     completeChallenge();
     resetCountdown();
-  }
+  }, [completeChallenge, resetCountdown]);
 
-  function handleChallengeFail() {
+  const handleChallengeFail = useCallback(() => {
     resetChallenge();
     resetCountdown();
-  }
+  }, [resetChallenge, resetCountdown]);
 
   return (
     <div className={styles.challengeBoxContainer}>
