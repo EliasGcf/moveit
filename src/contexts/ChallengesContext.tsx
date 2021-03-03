@@ -47,7 +47,7 @@ export function ChallengesProvider({
   const [activeChallenge, setActiveChallenge] = useState<Challenge>(null);
   const [isLevelUpModelOpen, setIsLevelUpModelOpen] = useState(false);
 
-  const experienceToNextLevel = Math.pow((level + 1) * 4, 2);
+  const experienceToNextLevel = ((level + 1) * 4) ** 2;
 
   useEffect(() => {
     Notification.requestPermission();
@@ -95,7 +95,7 @@ export function ChallengesProvider({
     let finalExperience = currentExperience + amount;
 
     if (finalExperience >= experienceToNextLevel) {
-      finalExperience = finalExperience - experienceToNextLevel;
+      finalExperience -= experienceToNextLevel;
       levelUp();
     }
 

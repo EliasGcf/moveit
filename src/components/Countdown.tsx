@@ -1,5 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
-import { ChallengesContext } from '../contexts/ChallengesContext';
+import { useContext } from 'react';
 import { CountdownContext } from '../contexts/CountdownContext';
 import styles from '../styles/components/Countdown.module.css';
 
@@ -33,7 +32,7 @@ export function Countdown() {
       </div>
 
       {hasFinished ? (
-        <button disabled className={styles.countdownButton}>
+        <button type="button" disabled className={styles.countdownButton}>
           Ciclo encerrado
         </button>
       ) : (
