@@ -65,7 +65,7 @@ $ git clone https://github.com/EliasGcf/moveit.git && cd moveit
 $ yarn
 
 # Start the app
-$ yarn start
+$ yarn dev
 ```
 
 ## 📝 License
